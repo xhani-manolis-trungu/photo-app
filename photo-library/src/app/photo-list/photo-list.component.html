@@ -1,0 +1,48 @@
+<!-- photo-list.component.html -->
+<!--
+  infiniteScroll
+[loadMoreDataFn]="loadMorePhotos.bind(this)"
+[scrollThreshold]="0"
+(onLoadMoreError)="handleLoadMoreError($event)"
+(loadMoreData)="handleLoadMoreData($event)"
+ -->
+
+<div>
+  <div class="photo-list-container">
+    <div class="content">
+      <div
+        class="items"
+        appObserveElement
+        #intersection="intersection"
+        (isIntersecting)="loadMorePhotos()"
+      >
+        <div class="item" *ngFor="let photo of photos$ | async; let key=index;">
+          <!-- <pre>{{photo | json}}</pre> -->
+          <img
+            [ngSrc]="photo?.download_url"
+            alt="Random Photo"
+            fill
+            priority/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="red"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              [ngClass]="{'heart-icon': true, 'clicked': photo.isFavorite}"
+              (click)="actOnFavorites(photo)"
+            >
+              <path
+                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C15.09 3.81 16.76 3 18.5 3 21.58 3 24 5.42 24 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+              />
+            </svg>
+        </div>
+      </div>
+      <div class="loader-wrapper" *ngIf="loading$ | async">
+        <div class="loader"></div>
+      </div>
+    </div>
+  </div>
+</div>
